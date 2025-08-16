@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Spam or Ham Classifier</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <style>
+        /* Reset and Box-Sizing */
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: rgb(237, 234, 226);
+            color: rgb(39, 40, 41);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Section Container */
+        section {
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+                        rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        /* Logo Styling */
+        section img {
+            margin-bottom: 30px;
+        }
+
+        /* Form Styling */
+        form {
+            width: 100%;
+        }
+
+        /* Input Wrapper */
+        .input-wrapper {
+            width: 100%;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        /* Textarea Styling */
+        .input-wrapper textarea {
+            width: 100%;
+            padding: 20px 15px 15px 15px; /* Adjusted padding to accommodate label */
+            border-radius: 10px;
+            border: 1px solid rgba(39, 40, 41, 0.6);
+            font-size: 1.1rem;
+            outline: none;
+            resize: none;
+            height: 150px;
+            line-height: 1.5;
+            transition: border-color 0.4s ease;
+        }
+
+        /* Floating Label Styling */
+        .input-wrapper span {
+            position: absolute;
+            top: 15px; /* Positioned at the top inside the textarea */
+            left: 20px;
+            padding: 0 5px;
+            background: #fff;
+            color: rgba(39, 40, 41, 0.6);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        /* Focus and Valid States */
+        .input-wrapper textarea:focus,
+        .input-wrapper textarea:valid {
+            border-color: rgba(101, 40, 247, 0.6);
+        }
+
+        .input-wrapper textarea:focus ~ span,
+        .input-wrapper textarea:valid ~ span {
+            top: -10px; /* Move label above the textarea */
+            left: 15px;
+            font-size: 0.8rem;
+            color: rgba(101, 40, 247, 0.6);
+        }
+
+        /* Submit Button Styling */
+        .btn-submit {
+            display: inline-block;
+            padding: 15px 30px;
+            background: rgba(101, 40, 247, 0.6);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.4s ease;
+        }
+
+        .btn-submit:hover {
+            background: rgba(101, 40, 247, 0.8);
+        }
+
+        /* Heading Styles */
+        h1 {
+            font-weight: 400;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 30px;
+            font-weight: 200;
+            color: #333;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        {% if prediction_text %}
+            {% if "spam" in prediction_text|lower %}
+                <img src="{{ url_for('static', filename='spam.png') }}" alt="Spam Logo" width="150" />
+            {% else %}
+                <img src="{{ url_for('static', filename='mail.png') }}" alt="Mail Logo" width="150" />
+            {% endif %}
+        {% else %}
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" width="150" />
+        {% endif %}
+        
+        <h1>Spam or Ham Classifier</h1>
+        <form action="/predict" method="post">
+            <div class="input-wrapper">
+                <textarea id="message" name="message" placeholder=" " required></textarea>
+                <span>Enter your message...</span>
+            </div>
+            <button type="submit" class="btn-submit">Classify</button>
+        </form>
+        
+        {% if prediction_text %}
+        <h2>{{ prediction_text }}</h2>
+        {% endif %}
+    </section>
+</body>
+</html>
